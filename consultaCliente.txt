@@ -1,0 +1,61 @@
+void consultaCliente(DISCO* tabela){
+	
+	char nome[50];
+	int conta, CPF, valido, linha, aux_cpf, k, i=0, linhaarq, x;
+	float limite,saldo;
+
+	
+	FILE *arq;
+	arq = fopen("Banco.txt","r");
+	REG *registro;
+	DIR *aux = tabela->inicio;
+	
+	printf("\nDigite o CPF para buscar:\n");
+	scanf("%d", &aux_cpf);
+	
+	x = pow(2,proGlobal);
+	k = aux_cpf%x;
+	printf("Diretorio do cpf: %d\n", k);
+	//Enconta o diretorio
+	//Hr
+	
+	while(aux->posi != k){
+		aux = aux->prox;
+		if(aux->posi==k) printf("\t\tAchou o diretorio\n");
+	}
+	
+	
+	registro = aux->apontaComeco;
+	printf("registro do bucket: %d", registro->id);
+	
+	while(registro->id != aux_cpf){
+		registro = registro->prox; //Encontra o registro buscado pelo CPF
+		if(registro!=NULL) printf("registro do bucket: %d\n", registro->id);
+		system("pause");		
+	}
+	
+	linha = registro->linha;
+	printf("\n\t\t|> Linha do ARQUIVO: %d\n", linha); //Achou a linha do registro no arquivo
+	
+
+	   
+	CLI *novo = (CLI *) malloc (sizeof(CLI));
+	do{ //Busca o registro no arquivo
+		fflush(stdin);
+		fscanf(arq, "%[^:]:%d:%d:%f:%f:%d:%d\n", nome,&conta,&CPF,&limite,&saldo,&valido,&linha);
+		printf("\n\t\t|+|==> CONSULTOU LINHA %d\n\n", linha);
+		system("pause");		
+	}while(CPF!=aux_cpf);
+
+	printf("\n\n||  CLIENTE CONSULTADO  ||\n\n");
+	printf("\n--------------------\n");
+    printf("\n NOME:%s\n", nome);
+    printf("\n CONTA:%d \n", conta);
+    printf("\n CPF:%d \n", CPF);
+    printf("\n LIMITE:%f \n", limite);
+    printf("\n SALDO:%f \n", saldo);
+	printf("\n VALIDO:%d \n", valido);
+    printf("\n LINHA:%d \n", linha);
+    printf("\n--------------------\n");
+	
+}
